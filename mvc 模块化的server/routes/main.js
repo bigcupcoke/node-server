@@ -31,7 +31,7 @@ const headerFromMapper = (mapper={}, code=200) => {
     const keys = Object.keys(mapper)
     const  s = keys.map((k) => {
         let v = mapper[k]
-        return `${k}=${v}\r\n`
+        return `${k}: ${v}\r\n`
     }).join('')
     const header = base + s
     return header
@@ -45,6 +45,7 @@ const redirect = (url) => {
     const header = headerFromMapper(headers, 302)
     const body = ''
     const r = header + '\r\n' + body
+    log('r', r)
     return r
 }
 
@@ -52,12 +53,14 @@ const redirect = (url) => {
 const loginRequired = (routeFunc) => {
     const func = (request) => {
         const u = currentUser(request)
+        log('u in loginRequired', u)
         if (u === null) {
-            redirect('/login')
+            return redirect('/login')
         } else {
             return routeFunc(request)
         }
     }
+    return func
 }
 
 module.exports = {
@@ -68,3 +71,14 @@ module.exports = {
     redirect: redirect,
     loginRequired: loginRequired,
 }
+
+// const setName = function(obj) {
+//     obj.name = 'dake'
+//     console.log('obj', obj)
+//     obj = new Object
+//     console.log('new obj', obj)
+//     obj.name = 'erke'
+// }
+//
+// const person = {}
+// setName(person)

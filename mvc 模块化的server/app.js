@@ -2,8 +2,9 @@ const net = require('net')
 const fs = require('fs')
 const { log } = require('./utils')
 const Request = require('./request.js')
-const routeIndex = require('./routes/index')
-
+const routeIndex = require('./routes/index.js')
+const routeUser = require('./routes/user.js')
+const routeTodos = require('./routes/todo.js')
 const error = (code=404) => {
     const e = {
         404: 'HTTP/1.1 20 OK\r\n\r\n<h1>404 NOT FOUND</h1>'
@@ -13,11 +14,12 @@ const error = (code=404) => {
 }
 
 // 生成响应
-const responseFor = (raw, request) => {
+const responseFor = (request) => {
     const route = {}
-    const routes = Object.assign(route, routeIndex)
+    const routes = Object.assign(route, routeIndex, routeUser, routeTodos)
     const response = routes[request.path] || error
     const resp = response(request)
+    // log('resp', resp)
     return resp
 }
 
@@ -25,7 +27,9 @@ const responseFor = (raw, request) => {
 const processRequest = (raw, socket) => {
     const r = raw.toString()
     const request = new Request(r)
-    const response = responseFor(raw, request)
+    log('requets', request)
+    const response = responseFor(request)
+    // log('respnse in socket', response)
     socket.write(response)
     socket.destroy()
 }

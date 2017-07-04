@@ -1,5 +1,5 @@
 const Model = require('./main.js')
-
+const { log } = require('../utils.js')
 class User extends Model {
     constructor(form={}) {
         super()
@@ -9,7 +9,15 @@ class User extends Model {
     }
 
     validateLogin() {
+        const u = User.findOne('username', this.username)
+        return u !== null && u.password === this.password
+    }
 
+    validateRegister() {
+        const validForm = this.username.length > 2 && this.password > 2
+        const uniqueUser = User.findOne('username', this.username) === null
+        // log(`validaForm${validForm}\r\nuniqueUser${uniqueUser}`)
+        return validForm && uniqueUser
     }
 }
 

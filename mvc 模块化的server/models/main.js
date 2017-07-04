@@ -1,4 +1,4 @@
-const { log, randomStr} = require('../../utils.js')
+const { log, randomStr } = require('../../utils.js')
 // log('a', randomStr())
 const fs = require('fs')
 
@@ -27,8 +27,11 @@ const load = (path) => {
 class Model {
     static dbPath() {
         const classname = this.name.toLowerCase()
-        const path = `../db/${classname}.txt`
-        return path
+        const path = require('path')
+        const filename = `${classname}.txt`
+        // 使用绝对路径可以保证路径没有问题
+        const p = path.join(__dirname, '../db', filename)
+        return p
     }
 
     static all() {
@@ -84,6 +87,7 @@ class Model {
             }
         }
         const path = cls.dbPath()
+        log('path', path)
         save(path, models)
     }
 }

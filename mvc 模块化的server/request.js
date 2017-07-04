@@ -1,56 +1,73 @@
-const { log } = require('../utils')
-
 class Request {
-    // new 的时候执行
     constructor(raw) {
-        // 解析 raw 原始信息
         const { method, path, query, headers, body } = this._parsedRaw(raw)
+        this.raw = raw
+        // 默认是 GET 方法
         this.method = method
         this.path = path
-        this.bdoy = body
+        // query 默认是一个 object, 这样使用会更加方便
+        this.query = query
+        this.body = body
         this.headers = {}
         this.cookies = {}
         this.addHeaders(headers)
     }
 
-    // 添加 cookies 的方法
     addCookies() {
+        //
         const cookies = this.headers.Cookie || ''
         const pairs = cookies.split('; ')
-        // log('cookies', cookies)
         pairs.forEach((pair) => {
-            let [k, v] = pair.split('=')
-            this.cookies[k] = v
+            if (pair.includes('=')) {
+                const [k, v] = pair.split('=')
+                this.cookies[k] = v
+            }
         })
     }
 
-    // 添加 headers 的方法
     addHeaders(headers) {
-        // log('headers', headers)
-        const lines = headers.split('\r\n')
+        const lines = headers
         lines.forEach((line) => {
-            let [k, v] = line.split(': ')
+            const [k, v] = line.split(': ')
             this.headers[k] = v
         })
         this.addCookies()
     }
 
-    // 解析路径。 返回的是一个包含path 和 query 的对象
-    _parsePathname(pathname) {
-        const index = pathname.indexOf('?')
+    form() {
+        const body = decodeURIComponent(this.body)
+        const pairs = body.split('&')
+        const d = {}
+        for (let pair of pairs) {
+            const [k, v] = pair.split('=')
+            d[k] = v
+        }
+        return d
+    }
+
+    _parsedPath(path) {
+        // 先判断 path 中是否包含 ?
+        const index = path.indexOf('?')
+        // 如果不包含 ?, query 是一个空对象
         if (index === -1) {
             return {
-                path: pathname,
+                path: path,
                 query: {},
             }
         } else {
-            let [path, search] = pathname.split('?')
+            // 如果包含 ?, 则按照 ? 将请求中的 path 分成 path 和 query
+            const l = path.split('?')
+            path = l[0]
+
+            // 下面这部分的作用是解析 query
+            // query 的格式为 a=b&c=d&e=f
+            const search = l[1]
             const args = search.split('&')
-            let query = {}
-            args.forEach((a) => {
-                const [k, v] = a.split('=')
+            const query = {}
+            for (let arg of args) {
+                const [k, v] = arg.split('=')
                 query[k] = v
-            })
+            }
             return {
                 path: path,
                 query: query,
@@ -58,36 +75,22 @@ class Request {
         }
     }
 
-    // 返回解析后的raw, 全是字符串
     _parsedRaw(raw) {
         const r = raw
-        // log('r', r)
-        const [method, pathname] = r.split(' ')
-        const { path, query } = this._parsePathname(pathname)
-        const raws = r.split('\r\n\r\n')
-        const headers = raws[0].split('\r\n')[1]
-        // log('raws', raws)
-        const body = raws[1]
+        const line = r.split(' ')
+        const [method, url] = line
+        const { path, query } = this._parsedPath(url)
+        const message = r.split('\r\n\r\n')
+        const headers = message[0].split('\r\n').slice(1)
+        const body = message[1]
 
         return {
-            method,
-            path,
-            query,
-            headers,
-            body,
+            method: method,
+            path: path,
+            query: query,
+            headers: headers,
+            body: body,
         }
-    }
-
-    // 解析 body 字符串, 返回 query 对象
-    form() {
-        const body = decodeURIComponent(this.body)
-        const args = body.split('&')
-        const result = {}
-        args.forEach((a) => {
-            const [k, v] = a.split('=')
-            result[k] = v
-        })
-        return result
     }
 }
 
