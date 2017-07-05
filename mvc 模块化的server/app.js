@@ -19,7 +19,7 @@ const responseFor = (request) => {
     const routes = Object.assign(route, routeIndex, routeUser, routeTodos)
     const response = routes[request.path] || error
     const resp = response(request)
-    // log('resp', resp)
+    log('resp', resp)
     return resp
 }
 
@@ -27,7 +27,6 @@ const responseFor = (request) => {
 const processRequest = (raw, socket) => {
     const r = raw.toString()
     const request = new Request(r)
-    log('requets', request)
     const response = responseFor(request)
     // log('respnse in socket', response)
     socket.write(response)

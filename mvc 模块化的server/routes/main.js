@@ -10,13 +10,14 @@ const currentUser = (request) => {
     const id = request.cookies.user || ''
     const username = session[id]
     const u = User.findOne('username', username)
+    log('currentUser', username, [ id ])
     return u
 }
 
 // 读取 html 文件的函数
 // 把页面的内容写入 html 文件中
 const template = (name) => {
-    const path = `../templates/${name}`
+    const path = `templates/${name}`
     const options = {
         encoding: 'utf8',
     }
@@ -45,7 +46,7 @@ const redirect = (url) => {
     const header = headerFromMapper(headers, 302)
     const body = ''
     const r = header + '\r\n' + body
-    log('r', r)
+    // log('r', r)
     return r
 }
 

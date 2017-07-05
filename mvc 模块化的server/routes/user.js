@@ -5,6 +5,8 @@ const {
     currentUser,
     template,
     headerFromMapper,
+    redirect,
+    loginRequired,
 } = require('./main.js')
 
 const User = require('../models/user')
@@ -19,7 +21,7 @@ const login = (request) => {
         const u = User.create(form)
         if (u.validateLogin()) {
             const sid = randomStr()
-            session[sid] = `user=${sid}`
+            session[sid] = u.username
             headers['Set-Cookie'] = `user=${sid}`
             result = '登录成功'
         } else {
@@ -42,8 +44,8 @@ const register = (request) => {
     let result
     if (request.method === 'POST') {
         const form = request.form()
-        log('u', form, request)
         const u = User.create(form)
+        log('u', u, request)
         if (u.validateRegister()) {
             u.save()
             const models = User.all()
@@ -65,9 +67,45 @@ const register = (request) => {
     return r
 }
 
+const admin = (request) => {
+    const u = currentUser(request)
+    // log('users', request)
+    let users
+    if (u.id === 1) {
+        const all = User.all()
+        // log('users', users)
+        users = all.map((u) => {
+            const t =  `
+                <div>username: ${u.username}   passowrd: ${u.password}   id: ${u.id}</div> 
+            `
+            return t
+        }).join('')
+    } else {
+        users = '<h1>你没有权限</h1>>'
+    }
+    let body = template('admin.html')
+    body = body.replace('{{users}}', users)
+    const headers = {
+        'Content-Type': 'text/html; charset=utf8',
+    }
+    // log('body', body)
+    const header = headerFromMapper(headers)
+    const r = header + '\r\n' + body
+    return r
+}
+
 const routeUser = {
     '/login': login,
     '/register': register,
+    '/admin/user': loginRequired(admin),
+}
+
+const test = () => {
+
+}
+
+if (require.main === module) {
+    test()
 }
 
 module.exports = routeUser

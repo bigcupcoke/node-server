@@ -11,6 +11,7 @@ const enSureExist = (path) => {
 
 const save = (path, data) => {
     const s = JSON.stringify(data, null, 2)
+    // log('debug s in save', s, data)
     fs.writeFileSync(path, s, 'utf8')
 }
 
@@ -62,14 +63,49 @@ class Model {
         return instance
     }
 
+    static find(key, value) {
+        const models = this.all()
+        const ms = []
+        models.forEach((m) => {
+            if (m[key] === value) {
+                ms.push(m)
+            }
+        })
+        return ms
+    }
+
+    // 因为经常用 id 来获取数据, 所以单独写一个 get 方法
+    static get(id) {
+        id = parseInt(id, 10)
+        // console.log('debug id', id)
+        return this.findOne('id', id)
+    }
+
+    // 删除
+    static remove(id) {
+        id = parseInt(id, 10)
+        const models = this.all()
+        const index = models.findIndex((e) => {
+            return e.id === id
+        })
+        if (index > -1) {
+            models.splice(index, 1)
+        }
+        const path = this.dbPath()
+        save(path, models)
+    }
+
+    // 保存
     save() {
         const cls = this.constructor
         const models = cls.all()
+        log('debug in Model models', models)
         if (this.id === undefined) {
             const len = models.length
             if (len > 0) {
                 const last = models[len - 1]
                 this.id = last.id + 1
+                log('this.id', this.id, last)
             } else {
                 this.id = 0
             }
@@ -87,9 +123,27 @@ class Model {
             }
         }
         const path = cls.dbPath()
-        log('path', path)
+        // log('path', path)
         save(path, models)
     }
+}
+
+
+const testSave = () => {
+    const form = {
+        username: 'qqq',
+        password: 'qqq',
+    }
+    const m = Model.create(form)
+    m.save()
+}
+
+const test = () => {
+    testSave()
+}
+
+if (require.main === module) {
+    test()
 }
 
 module.exports = Model

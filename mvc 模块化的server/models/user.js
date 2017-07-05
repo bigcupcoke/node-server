@@ -6,6 +6,7 @@ class User extends Model {
         this.username = form.username || ''
         this.password = form.password || ''
         this.note = form.note || ''
+        this.id = form.id
     }
 
     validateLogin() {
@@ -14,9 +15,9 @@ class User extends Model {
     }
 
     validateRegister() {
-        const validForm = this.username.length > 2 && this.password > 2
+        const validForm = this.username.length > 2 && this.password.length > 2
         const uniqueUser = User.findOne('username', this.username) === null
-        // log(`validaForm${validForm}\r\nuniqueUser${uniqueUser}`)
+        log(`validaForm${validForm}\r\nuniqueUser${uniqueUser}`)
         return validForm && uniqueUser
     }
 }
