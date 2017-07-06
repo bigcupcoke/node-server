@@ -7,6 +7,8 @@ class User extends Model {
         this.password = form.password || ''
         this.note = form.note || ''
         this.id = form.id
+        // 权限， 默认是 2
+        this.role = form.role || 2
     }
 
     validateLogin() {

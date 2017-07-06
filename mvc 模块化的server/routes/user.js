@@ -69,9 +69,10 @@ const register = (request) => {
 
 const admin = (request) => {
     const u = currentUser(request)
-    // log('users', request)
+    log('users', u)
     let users
-    if (u.id === 1) {
+    let form
+    if (u.role === 1) {
         const all = User.all()
         // log('users', users)
         users = all.map((u) => {
@@ -80,11 +81,20 @@ const admin = (request) => {
             `
             return t
         }).join('')
+        form = `
+            <form action="/admin/user/update" method="post">
+                <input type="text" name="id" placeholder="id"><br>
+                <input type="text" name="password" placeholder="password">
+                <button type="submit">edit password</button>
+            </form>
+        `
     } else {
         users = '<h1>你没有权限</h1>>'
+        form = ''
     }
     let body = template('admin.html')
     body = body.replace('{{users}}', users)
+    body = body.replace('{{form}}', form)
     const headers = {
         'Content-Type': 'text/html; charset=utf8',
     }
@@ -94,10 +104,24 @@ const admin = (request) => {
     return r
 }
 
+const update = (request) => {
+    // log('request in update', request)
+    if (request.method === "POST") {
+        const form = request.form()
+        const u = User.get(form.id)
+        if (u !== null) {
+            u.password = form.password
+            u.save()
+        }
+    }
+    return redirect('/admin/user')
+}
+
 const routeUser = {
     '/login': login,
     '/register': register,
     '/admin/user': loginRequired(admin),
+    '/admin/user/update': update,
 }
 
 const test = () => {
