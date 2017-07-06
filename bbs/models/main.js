@@ -1,4 +1,4 @@
-const { log, randomStr } = require('../../utils.js')
+const { log, randomStr } = require('../utils.js')
 // log('a', randomStr())
 const fs = require('fs')
 

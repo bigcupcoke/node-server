@@ -6,7 +6,7 @@ const routeIndex = require('./routes/index.js')
 const routeUser = require('./routes/user.js')
 const routeTodos = require('./routes/todo.js')
 const error = (code=404) => {
-    const e = {
+        const e = {
         404: 'HTTP/1.1 20 OK\r\n\r\n<h1>404 NOT FOUND</h1>'
     }
     const r = e[code] || ''

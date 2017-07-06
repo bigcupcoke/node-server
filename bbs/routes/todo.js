@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { log, randomStr } = require('../../utils.js')
+const { log, randomStr } = require('../utils.js')
 const {
     session,
     currentUser,
@@ -19,8 +19,10 @@ const formattedTime = (ts) => {
     const date = d.getDate()
     const hours = d.getHours()
     const minutes = d.getMinutes()
-    const seconds = d.getSeconds()
-
+    let seconds = d.getSeconds()
+    if (seconds < 10) {
+        seconds = '0' + String(seconds)
+    }
     const t = `${hours}:${minutes}:${seconds}`
     return t
 }
@@ -49,8 +51,9 @@ const index = (request) => {
         return t
     }).join('')
     // log('todos debug', todos)
-    let body = template('todo_index.html')
-    body = body.replace('{{todos}}', todos)
+    const body = template('todo_index.html', {
+        todos: todos,
+    })
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
     // log('r', r)
@@ -77,9 +80,10 @@ const edit = (request) => {
     // log('debug todo', request.query)
     const todo = Todo.get(id)
     // log('debug todo', todo)
-    let body = template('todo_edit.html')
-    body = body.replace('{{todo_id}}', todo.id)
-    body = body.replace('{{todo_title}}', todo.title)
+    const body = template('todo_edit.html', {
+        'todo_id': todo.id,
+        'todo_title': todo.title,
+    })
     const headers = {
         'Content-Type': 'text/html',
     }

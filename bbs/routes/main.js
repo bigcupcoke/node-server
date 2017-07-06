@@ -1,29 +1,33 @@
 const fs = require('fs')
-// const User = require('../models/user.js')
+const nunjucks = require('nunjucks')
 const { log } = require('../utils.js')
 
 const User = require('../models/user.js')
 const Requset = require('../request.js')
 const session = {}
 
+// 配置 loader, nunjucks 会从这个目录中加载模板
+const loader = new nunjucks.FileSystemLoader('templates', {
+    // noCache: true 是关闭缓存, 这样每次都会重新计算模板
+    noCache: true,
+})
+
+// 用 loader 创建一个环境, 用这个环境可以读取模板文件
+const env = new nunjucks.Environment(loader)
+
+// 查找当前用户
 const currentUser = (request) => {
     const id = request.cookies.user || ''
     const username = session[id]
     const u = User.findOne('username', username)
-    log('currentUser', username, [ id ])
+    // log('currentUser', username, [ id ])
     return u
 }
 
 // 读取 html 文件的函数
 // 把页面的内容写入 html 文件中
-const template = (name) => {
-    const path = `templates/${name}`
-    const options = {
-        encoding: 'utf8',
-    }
-    // log('path', path)
-    const s = fs.readFileSync(path, options)
-    // log('s', s)
+const template = (path, data) => {
+    const s = env.render(path, data)
     return s
 }
 

@@ -15,6 +15,13 @@
         <br>
         <button type="submit">登录</button>
     </form>
-    <p>{{result}}</p>
+    {% for u in result %}
+    <div>
+        <span>{{ u.id }}</span>
+        <span>{{ u.username }}</span>
+        <span>{{ u.password }}</span>
+        <span>{{ u.note }}</span>
+    </div>
+    {% endfor %}
 </body>
 </html>

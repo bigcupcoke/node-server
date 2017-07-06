@@ -32,9 +32,10 @@ const login = (request) => {
     }
     const u = currentUser(request)
     let username = u ? u.username : ''
-    let body = template('login.html')
-    body = body.replace('{{username}}', username)
-    body = body.replace('{{result}}', result)
+    const body = template('login.html', {
+        username: username,
+        result: result,
+    })
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
     return r
@@ -45,20 +46,20 @@ const register = (request) => {
     if (request.method === 'POST') {
         const form = request.form()
         const u = User.create(form)
-        log('u', u, request)
+        // log('u', u, request)
         if (u.validateRegister()) {
             u.save()
             const models = User.all()
-            const us = JSON.stringify(models, null, 2)
-            result = `注册成功<br><pre>${us}</pre>`
+            result = models
         } else {
             result = '用户名和密码长度必须大于2或者用户名已经存在'
         }
     } else {
         result = ''
     }
-    let body = template('register.html')
-    body = body.replace('{{result}}', result)
+    const body = template('register.html', {
+        result: result,
+    })
     const headers = {
         'Content-Type': 'text/html',
     }
@@ -92,9 +93,10 @@ const admin = (request) => {
         users = '<h1>你没有权限</h1>>'
         form = ''
     }
-    let body = template('admin.html')
-    body = body.replace('{{users}}', users)
-    body = body.replace('{{form}}', form)
+    const body = template('admin.html', {
+        user: users,
+        from, form,
+    })
     const headers = {
         'Content-Type': 'text/html; charset=utf8',
     }

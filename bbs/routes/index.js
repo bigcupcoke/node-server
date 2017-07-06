@@ -14,8 +14,9 @@ const index = (request) => {
     const header  = headerFromMapper(headers)
     const u = currentUser(request)
     const username = u ? u.username : ''
-    let body = template('index.html')
-    body = body.replace('{{username}}', username)
+    let body = template('index.html', {
+        username: username,
+    })
     const r = header + '\r\n' + body
     log(`r\r\n${r}`)
     return r
