@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>weibo index</title>
+    <style>
+        .comment {
+            border: 1px solid lightblue;
+        }
+    </style>
+</head>
+<body>
+    <a href="/weibo/new">写新微博</a>
+    {% for w in weibos  %}
+        <div>
+            {{ w.content }} from {{ user.username }}
+            <a href="/weibo/delete?id={{ w.id }}">删除</a>
+            <a href="/weibo/edit?id={{ w.id }}">修改</a>
+            {#w.comments() 拿到当前微博下的所有评论#}
+            {% for c in w.comments() %}
+                <div class="comment">
+                    {{ c.user().username }}: {{ c.content }}
+                </div>
+            {% endfor %}
+            <form action="/comment/add" method="post">
+                <input type="hidden" name="weibo_id" value="{{ w.id }}">
+                <input type="text" name="content">
+                <br>
+                <button type="submit">添加评论</button>
+            </form>
+        </div>
+    {% endfor %}
+</body>
+</html>
