@@ -15,13 +15,25 @@ const loader = new nunjucks.FileSystemLoader('templates', {
 // 用 loader 创建一个环境, 用这个环境可以读取模板文件
 const env = new nunjucks.Environment(loader)
 
+// const currentUser = (request) => {
+//     const id = request.cookies.session || ''
+//     const username = session[id]
+//     const u = User.findOne('username', username)
+//     // log('currentUser', username, [ id ])
+//     return u
+// }
+
 // 查找当前用户
 const currentUser = (request) => {
-    const id = request.cookies.user || ''
-    const username = session[id]
-    const u = User.findOne('username', username)
-    // log('currentUser', username, [ id ])
-    return u
+    const s = request.cookies.session || ''
+    if(s.length > 0) {
+        const r = session.decrypt(s)
+        const uid = r.uid
+        const u = User.findOne('id', uid)
+        return u
+    } else {
+        return null
+    }
 }
 
 // 读取 html 文件的函数
@@ -40,6 +52,18 @@ const headerFromMapper = (mapper={}, code=200) => {
     }).join('')
     const header = base + s
     return header
+}
+
+const httpResponse = (body, headers=null) => {
+    let mapper = {
+        'Content-Type': 'text/html',
+    }
+    if (headers !== null) {
+        mapper = Object.assign(mapper, headers)
+    }
+    const header = headerFromMapper(mapper)
+    const r = header + '\r\n' + body
+    return r
 }
 
 //重定向函数
@@ -75,6 +99,7 @@ module.exports = {
     headerFromMapper: headerFromMapper,
     redirect: redirect,
     loginRequired: loginRequired,
+    httpResponse: httpResponse,
 }
 
 // const setName = function(obj) {

@@ -38,17 +38,24 @@ class Model {
     static all() {
         const path = this.dbPath()
         const models = load(path)
-        const ms = []
-        models.forEach((m) => {
-            let model = this.create(m)
-            ms.push(model)
+        const ms = models.map((m) => {
+            const instance = this._newFromDict(m)
+            return instance
         })
         return ms
     }
 
     static create(form={}) {
         const instance = new this(form)
+        // create 过程就先把实例存入数据库
+        instance.save()
         return instance
+    }
+
+    static _newFromDict(dict) {
+        const cls = this
+        const m = new cls(dict)
+        return m
     }
 
     static findOne(key, value) {
@@ -99,32 +106,25 @@ class Model {
     save() {
         const cls = this.constructor
         const models = cls.all()
-        log('debug in Model models', models)
         if (this.id === undefined) {
-            const len = models.length
-            if (len > 0) {
-                const last = models[len - 1]
+            if (models.length > 0) {
+                const last = models[models.length - 1]
                 this.id = last.id + 1
-                log('this.id', this.id, last)
             } else {
-                this.id = 0
+                // 0 在 js 中会被处理成 false, 第一个元素的 id 设置为 1, 方便处理
+                this.id = 1
             }
             models.push(this)
         } else {
-            let index = -1
-            models.forEach((m, i) => {
-                if (m.id === this.id) {
-                    index = i
-                    return false
-                }
+            const index = models.findIndex((e) => {
+                return e.id === this.id
             })
             if (index > -1) {
                 models[index] = this
             }
         }
         const path = cls.dbPath()
-        // log('path', path)
-        save(path, models)
+        save(models, path)
     }
 }
 
