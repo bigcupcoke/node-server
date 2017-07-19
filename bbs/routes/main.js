@@ -1,10 +1,10 @@
 const fs = require('fs')
 const nunjucks = require('nunjucks')
-const { log } = require('../utils.js')
+const { log } = require('../utils')
 
-const User = require('../models/user.js')
-const Requset = require('../request.js')
-const session = {}
+const User = require('../models/user')
+const Requset = require('../request')
+const session = require('../models/session')
 
 // 配置 loader, nunjucks 会从这个目录中加载模板
 const loader = new nunjucks.FileSystemLoader('templates', {
@@ -15,17 +15,10 @@ const loader = new nunjucks.FileSystemLoader('templates', {
 // 用 loader 创建一个环境, 用这个环境可以读取模板文件
 const env = new nunjucks.Environment(loader)
 
-// const currentUser = (request) => {
-//     const id = request.cookies.session || ''
-//     const username = session[id]
-//     const u = User.findOne('username', username)
-//     // log('currentUser', username, [ id ])
-//     return u
-// }
-
 // 查找当前用户
 const currentUser = (request) => {
     const s = request.cookies.session || ''
+    log('s in currentuser', s)
     if(s.length > 0) {
         const r = session.decrypt(s)
         const uid = r.uid

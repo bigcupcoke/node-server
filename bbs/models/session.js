@@ -14,9 +14,10 @@ class Session extends Model {
         this.content = form
     }
 
-    decyrpt(c) {
+    decrypt(c) {
         var decipher = crypto.createDecipher(this.algorithm, key)
         var d = decipher.update(c, this.output, this.input)
+        console.log('decypt d', d)
         d += decipher.final(this.input)
         const r = JSON.parse(d)
         return r

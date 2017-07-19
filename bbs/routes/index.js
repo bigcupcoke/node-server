@@ -1,25 +1,21 @@
 const fs = require('fs')
 const { log } = require('../utils.js')
 const {
-    session,
     currentUser,
     template,
-    headerFromMapper,
+    httpResponse,
 } = require('./main.js')
 
+const session = require('../models/session')
+
 const index = (request) => {
-    const headers = {
-        'Content-Type': 'text/html',
-    }
-    const header  = headerFromMapper(headers)
+    // log('requset in index', request)
     const u = currentUser(request)
     const username = u ? u.username : ''
     let body = template('index.html', {
         username: username,
     })
-    const r = header + '\r\n' + body
-    log(`r\r\n${r}`)
-    return r
+    return httpResponse(body)
 }
 
 const favicon = (request) => {

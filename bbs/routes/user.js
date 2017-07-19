@@ -43,7 +43,9 @@ const register = (request) => {
     let result
     if (request.method === 'POST') {
         const form = request.form()
+        // log('form', form)
         const u = User.register(form)
+        // log('u', u)
         if (u !== null) {
             result = `注册成功`
         } else {
@@ -53,6 +55,7 @@ const register = (request) => {
         result = ''
     }
     const us = User.all()
+    // log('us', us)
     const body = template('register.html', {
         result: result,
         users: us,

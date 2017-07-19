@@ -26,6 +26,7 @@ class User extends Model {
     // 密码加盐加密
     static saltedPassword(password, salt='') {
         // sha1 hash算法
+        log('password', [ password])
         const _sha1 = (s) => {
             const algoritm = 'sha1'
             const hash = crypto.createHash(algoritm)
@@ -50,7 +51,7 @@ class User extends Model {
         const cls = this.constructor
         const { username, password} = form
         const pwd = cls.saltedPassword(password)
-        const usernameEquals = (this.username === usenname)
+        const usernameEquals = (this.username === username)
         const passwordEquals = (this.password === pwd)
         return usernameEquals && passwordEquals
     }

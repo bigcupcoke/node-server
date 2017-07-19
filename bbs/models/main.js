@@ -124,7 +124,7 @@ class Model {
             }
         }
         const path = cls.dbPath()
-        save(models, path)
+        save(path, models)
     }
 }
 
