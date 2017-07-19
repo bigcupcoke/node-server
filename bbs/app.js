@@ -24,15 +24,17 @@ const responseFor = (request) => {
 }
 
 // 处理请求
-const processRequest = (raw, socket) => {
-    const r = raw.toString()
-    const request = new Request(r)
-    const response = responseFor(request)
-    // log('respnse in socket', response)
+const processRequest = (data, socket) => {
+    const raw = data.toString('utf8')
+    const request = new Request(raw)
+    const ip = socket.localAddress
+    log('请求开始')
+    log(`ip and request, ${ip}\n${raw}`)
+    log('请求结束')
+    const response = responseFor(raw, request)
     socket.write(response)
     socket.destroy()
 }
-
 // 把逻辑放在单独的函数中, 这样可以方便地调用
 // run 函数是一套完整的后端server, 启服务， 接数据，处理数据，发送响应
 const run = (host='', port=4000) => {
@@ -53,7 +55,7 @@ const run = (host='', port=4000) => {
 }
 
 const __main = () => {
-    run('127.0.0.1')
+    run('127.0.0.1', 3500)
 }
 
 if (require.main === module) {

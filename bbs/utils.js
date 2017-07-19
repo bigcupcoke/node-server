@@ -18,13 +18,11 @@ const formattedTime = () => {
 
 const log = (...args) => {
     const t = formattedTime()
-    // 把时间和需要 log 的内容拼接在一起, 这样就知道什么时候发生了什么
     const arg = [t].concat(args)
     console.log.apply(console, arg)
 
-    // 将 log 的内容写入到一个文件中, 可以持久化存储 log, 也就是打日志
-    // flag: 'a' 是追加模式, 每次都会把内容写进去, 并且不会覆盖
-    fs.writeFileSync('log.txt', args, {
+    const content = t + ' ' + args + '\n'
+    fs.writeFileSync('log.txt', content, {
         flag: 'a',
     })
 }
