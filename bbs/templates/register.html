@@ -15,7 +15,8 @@
         <br>
         <button type="submit">登录</button>
     </form>
-    {% for u in result %}
+    <p>{{  result }}</p>
+    {% for u in users %}
     <div>
         <span>{{ u.id }}</span>
         <span>{{ u.username }}</span>
