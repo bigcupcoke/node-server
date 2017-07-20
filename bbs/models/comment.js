@@ -23,6 +23,14 @@ class Comment extends Model {
         const w = Weibo.findOne('id', this.weibo_id)
         return w
     }
+
+
+    static del(id, user) {
+        const c = this.get(id)
+        if (c.user_id === user.id) {
+            this.remove(id)
+        }
+    }
 }
 
 module.exports = Comment

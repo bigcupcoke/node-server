@@ -58,9 +58,10 @@ const edit = (request) => {
 const update = (request) => {
     if (request.method === 'POST') {
         const form = request.form()
-        // Weibo.update(form)
+        // log('form', form)
+        Weibo.update(form)
         const u = currentUser(request)
-        // return redirect(`/weibo/index?user_id=${u.id}`)
+        return redirect(`/weibo/index?user_id=${u.id}`)
     }
 }
 
@@ -80,14 +81,22 @@ const commentAdd = (request) => {
     return redirect(`/weibo/index?user_id=${user.id}`)
 }
 
+const commentDel = (request) => {
+    const id = Number(request.query.id)
+    const u = currentUser(request)
+    Comment.del(id, u)
+    return redirect(`/weibo/index?user_id=${u.id}`)
+}
+
 const routeMapper = {
     '/weibo/index': loginRequired(index),
     '/weibo/new': loginRequired(create),
     '/weibo/add': add,
     '/weibo/delete': del,
     '/weibo/update': update,
-    '/comment/add': loginRequired(commentAdd),
     '/weibo/edit': edit,
+    '/comment/add': loginRequired(commentAdd),
+    '/comment/delete': commentDel,
 }
 
 module.exports = routeMapper
