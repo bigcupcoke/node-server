@@ -30,6 +30,7 @@ const favicon = (request) => {
 
 const routeIndex = {
     '/': index,
+    '/favicon.ico': favicon,
 }
 
 module.exports = routeIndex

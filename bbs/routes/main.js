@@ -94,14 +94,3 @@ module.exports = {
     loginRequired: loginRequired,
     httpResponse: httpResponse,
 }
-
-// const setName = function(obj) {
-//     obj.name = 'dake'
-//     console.log('obj', obj)
-//     obj = new Object
-//     console.log('new obj', obj)
-//     obj.name = 'erke'
-// }
-//
-// const person = {}
-// setName(person)
