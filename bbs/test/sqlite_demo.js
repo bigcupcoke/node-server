@@ -1,33 +1,4 @@
-// 常用的关系型数据库有 mysql postgresql sqlite 等（具体区别上课再说）
-//
-// 传统数据库以表的形式存储数据
-// 一张表可以有很多个字段
-// 类似 excel 表格
 
-// 以用户表为例, 存储 4 个数据的表结构如下
-// 用户 id
-// 用户名
-// 密码
-// 邮箱
-//
-// 范例数据如下
-// id username password email
-// 1    gua     123     gua@qq.com
-// 2    gua1    23      gua1@q.com
-
-// 数据库通过 SQL 来操作数据
-// SQL （结构化查询语言）
-// 操作数据库的接口 也就是操作数据库的方法
-// 增加数据
-// 删除数据
-// 修改数据
-// 查询数据
-// CRUD
-// create retrieve update delete
-//
-// 数据库的更多的概念，上课会解释（文字太苍白）
-// 请下载 sqlitebrowser 软件
-// （这是一个管理 sqlite 数据库的免费软件，自行搜索或者等群内链接）
 `
 INSERT INTO
     users (id, username, password, email)
@@ -39,22 +10,10 @@ UPDATE users SET password=? WHERE _rowid_='2';
 UPDATE users SET email=? WHERE _rowid_='2';
 `
 
-/*
- 几种关系型数据库的用法和 sql 语法都极度相似
- 开发中一般会用 sqlite 数据库
- 部署到服务器上的时候才会使用 mysql 等数据库
- 当然 mysql 已经不适合这个版本了
- 对于 node 来说, mongo 是非常方便的
- MEAN 技术栈 = mongo + express + angular + node
- */
-
 // 引入 nodejs 的 sqlite3 模块,
 // nodejs 有不少 sqlite3 模块
-// 我们用的是 better-sqlite3 模块, 按照作者的说法, 全方位优于其他模块
-// 比如同步 API、 完整事务支持等
 const Database = require('better-sqlite3')
 
-// 创建一个数据库连接, 如果 node8.db 这个数据库文件不存在会先创建, 然后创建连接
 // 如果数据库文件存在则直接创建连接
 const db = new Database('node8.db')
 
