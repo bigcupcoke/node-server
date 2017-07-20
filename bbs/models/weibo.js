@@ -25,11 +25,11 @@ class Weibo extends Model {
     }
 
     static update(form={}) {
-        const u = User.findOne('id', form.user_id)
-        u.content = form.content || ''
-        u.save()
+        const id = Number(form.id)
+        const w = this.get(id)
+        w.content = form.content
+        w.save()
     }
-
 }
 
 module.exports = Weibo

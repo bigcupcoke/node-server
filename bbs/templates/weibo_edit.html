@@ -5,8 +5,10 @@
   <title>Weibo edit</title>
 </head>
 <body>
-    <form action="">
-        <input type="hidden" name="id" value="{{todo.id}}">
+    <form action="/weibo/update" method="POST">
+        <input type="hidden" name="id" value="{{ weibo.id }}">
+        <input type="text" name="content" value="{{ weibo.content }}">
+        <br>
         <button type="submit">修改微博</button>
     </form>
 </body>

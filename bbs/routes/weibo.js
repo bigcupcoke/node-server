@@ -46,8 +46,22 @@ const del = (request) => {
     return redirect(`/weibo/index?user_id=${u.id}`)
 }
 
-const edit = () => {
+const edit = (request) => {
+    const wid = Number(request.query.id)
+    const w = Weibo.get(wid)
+    const body = template('weibo_edit.html', {
+        weibo: w,
+    })
+    return httpResponse(body)
+}
 
+const update = (request) => {
+    if (request.method === 'POST') {
+        const form = request.form()
+        // Weibo.update(form)
+        const u = currentUser(request)
+        // return redirect(`/weibo/index?user_id=${u.id}`)
+    }
 }
 
 const commentAdd = (request) => {
@@ -71,6 +85,7 @@ const routeMapper = {
     '/weibo/new': loginRequired(create),
     '/weibo/add': add,
     '/weibo/delete': del,
+    '/weibo/update': update,
     '/comment/add': loginRequired(commentAdd),
     '/weibo/edit': edit,
 }
