@@ -12,7 +12,7 @@ const Weibo = require('../models/weibo')
 const Comment = require('../models/comment')
 
 const index = (request) => {
-    // 当前登录用户的 id
+    // 当前要访问页面用户的 id
     const user_id = Number(request.query.user_id)
     // 找到用户
     const u = User.get(user_id)
@@ -40,15 +40,27 @@ const add = (request) => {
     return redirect(`/weibo/index?user_id=${u.id}`)
 }
 
-const commentAdd = () => {
+const commentAdd = (request) => {
+    const u = currentUser(request)
+    const form = request.form()
+    const c = Comment.create(form)
+    c.user_id = u.id
+    c.save()
 
+    // 用户在某一个微博下面发表了评论
+    // 在 comment 里面添加查找对应 weibo 的方法
+    const w = c.weibo()
+
+    // 然后根据 weibo 信息查找 user
+    const user = w.user()
+    return redirect(`/weibo/index?user_id=${user.id}`)
 }
-
 
 const routeMapper = {
     '/weibo/index': loginRequired(index),
-    '/weibo/new': create,
+    '/weibo/new': loginRequired(create),
     '/weibo/add': add,
+    '/comment/add': loginRequired(commentAdd),
 }
 
 module.exports = routeMapper
