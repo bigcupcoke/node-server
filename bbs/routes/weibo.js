@@ -29,7 +29,6 @@ const create = (request) => {
     return httpResponse(body)
 }
 
-
 const add = (request) => {
     const u = currentUser(request)
     const form = request.form()
@@ -38,6 +37,17 @@ const add = (request) => {
     w.user_id = u.id
     w.save()
     return redirect(`/weibo/index?user_id=${u.id}`)
+}
+
+const del = (request) => {
+    const weiboId = Number(request.query.id)
+    Weibo.remove(weiboId)
+    const u = currentUser(request)
+    return redirect(`/weibo/index?user_id=${u.id}`)
+}
+
+const edit = () => {
+
 }
 
 const commentAdd = (request) => {
@@ -60,7 +70,9 @@ const routeMapper = {
     '/weibo/index': loginRequired(index),
     '/weibo/new': loginRequired(create),
     '/weibo/add': add,
+    '/weibo/delete': del,
     '/comment/add': loginRequired(commentAdd),
+    '/weibo/edit': edit,
 }
 
 module.exports = routeMapper
