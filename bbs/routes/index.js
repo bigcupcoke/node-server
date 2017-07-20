@@ -9,7 +9,7 @@ const {
 const session = require('../models/session')
 
 const index = (request) => {
-    // log('requset in index', request)
+    log('requset in index', request)
     const u = currentUser(request)
     const username = u ? u.username : ''
     let body = template('index.html', {
