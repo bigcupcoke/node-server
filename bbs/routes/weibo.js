@@ -16,10 +16,15 @@ const index = (request) => {
     const user_id = Number(request.query.user_id)
     // 找到用户
     const u = User.get(user_id)
+    // 当前登录的用户
+    const cUser = currentUser(request)
+    const same = Weibo.same(u, cUser)
+    // log('same', same, u, cUser)
     const weibos = Weibo.find('user_id', u.id)
     const body = template('weibo_index.html', {
         weibos: weibos,
         user: u,
+        same: same,
     })
     return httpResponse(body)
 }
@@ -41,8 +46,8 @@ const add = (request) => {
 
 const del = (request) => {
     const weiboId = Number(request.query.id)
-    Weibo.remove(weiboId)
     const u = currentUser(request)
+    Weibo.remove(weiboId)
     return redirect(`/weibo/index?user_id=${u.id}`)
 }
 

@@ -30,6 +30,16 @@ class Weibo extends Model {
         w.content = form.content
         w.save()
     }
+
+    static same(user, currentUser) {
+        let result
+        if (user.id === currentUser.id) {
+            result = true
+        } else {
+            result = false
+        }
+        return result
+    }
 }
 
 module.exports = Weibo
