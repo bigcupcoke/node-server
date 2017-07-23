@@ -20,7 +20,9 @@
             {% for c in w.comments() %}
                 <div class="comment">
                     {{ c.user().username }}: {{ c.content }}
+                    {% if same %}
                     <a href="/comment/delete?id={{ c.id }}">删除</a>
+                    {% endif %}
                 </div>
             {% endfor %}
             <form action="/comment/add" method="post">
