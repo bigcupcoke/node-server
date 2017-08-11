@@ -3,7 +3,9 @@
   },
   "dependencies": {
     "nunjucks": "^3.0.1",
-    "better-sqlite3": "^2.3.3",
     "mongodb": "^2.2.26"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
