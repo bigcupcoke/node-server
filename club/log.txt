@@ -1,0 +1,99 @@
+14:21:42 listening server at http://127.0.0.1:3000
+14:31:17 请求方法,GET
+14:31:17 request, query 参数,[object Object]
+14:31:47 listening server at http://127.0.0.1:3000
+14:31:51 请求方法,GET
+14:31:51 request, query 参数,[object Object]
+14:34:39 listening server at http://127.0.0.1:3000
+14:34:56 请求方法,GET
+14:34:56 request, query 参数,[object Object]
+"14:35:10 listening server at http://127.0.0.1:3000\n""14:35:12 请求方法,GET\n""14:35:12 request, query 参数,[object Object]\n"14:35:56 listening server at http://127.0.0.1:3000
+14:35:57 请求方法,GET
+14:35:57 request, query 参数,[object Object]
+14:36:09 [
+  "listening server at http://127.0.0.1:3000"
+]
+14:36:11 [
+  "请求方法",
+  "GET"
+]
+14:36:11 [
+  "request, query 参数",
+  {}
+]
+14:37:56 [
+  "请求方法",
+  "GET"
+]
+14:37:56 [
+  "request, query 参数",
+  {
+    "123": ""
+  }
+]
+14:40:35 [
+  "请求方法",
+  "GET"
+]
+14:40:35 [
+  "request, query 参数",
+  {
+    "msg": "a"
+  }
+]
+14:41:15 [
+  "listening server at http://127.0.0.1:3000"
+]
+14:41:17 [
+  "请求方法",
+  "GET"
+]
+14:41:17 [
+  "request, query 参数",
+  {
+    "msg": "aa"
+  }
+]
+14:41:17 [
+  "request, body 参数",
+  {}
+]
+14:41:47 [
+  "listening server at http://127.0.0.1:3000"
+]
+14:41:49 [
+  "request, POST 的 form 表单数据",
+  {
+    "msg_post": "aads"
+  }
+]
+14:41:49 [
+  "请求方法",
+  "GET"
+]
+14:41:49 [
+  "request, query 参数",
+  {}
+]
+14:41:49 [
+  "request, body 参数",
+  {}
+]
+14:41:52 [
+  "request, POST 的 form 表单数据",
+  {
+    "msg_post": "dasd"
+  }
+]
+14:41:52 [
+  "请求方法",
+  "GET"
+]
+14:41:52 [
+  "request, query 参数",
+  {}
+]
+14:41:52 [
+  "request, body 参数",
+  {}
+]
