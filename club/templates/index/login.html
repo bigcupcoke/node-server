@@ -6,6 +6,7 @@
 </head>
 <body>
     <form action="/login" method="post">
+        <input type="hidden" name="next_url" value="{{ next_url }}">
         <p>
             <input type="text" name="username" placeholder="username">
         </p>

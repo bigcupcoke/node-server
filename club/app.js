@@ -8,10 +8,6 @@ const { secretKey } = require('./config')
 
 const fs = require('fs')
 
-// 引入路由
-const todo = require('./routes/todo')
-const index = require('./routes/index')
-
 const app = express()
 
 app.use(bodyPareser.urlencoded({
@@ -25,15 +21,23 @@ app.use(session({
 nunjucks.configure('templates', {
     autoescape: true,
     express: app,
+    noCache: true,
 })
 
-// static 资源
-const asset = __dirname + 'static'
-app.use('/static', express.static(asset))
 
+// 引入路由
+const todo = require('./routes/todo')
+const index = require('./routes/index')
+const topic = require('./routes/t')
+const reply = require('./routes/r')
+// static 资源
+const asset = __dirname + '/static'
+
+app.use('/static', express.static(asset))
 app.use('/', index)
 app.use('/todo', todo)
-
+app.use('/topic', topic)
+app.use('/reply', reply)
 const run = (port=3000, host='127.0.0.1') => {
     const server = app.listen(port, host, () => {
         const address = server.address()
