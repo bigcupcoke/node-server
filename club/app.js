@@ -24,12 +24,17 @@ nunjucks.configure('templates', {
     noCache: true,
 })
 
+// 设置跨域
+// const cors = require('cors')
+// app.use(cors())
+
 
 // 引入路由
 const todo = require('./routes/todo')
 const index = require('./routes/index')
 const topic = require('./routes/t')
 const reply = require('./routes/r')
+const apiTopic = require('./api/topic')
 // static 资源
 const asset = __dirname + '/static'
 
@@ -38,6 +43,8 @@ app.use('/', index)
 app.use('/todo', todo)
 app.use('/topic', topic)
 app.use('/reply', reply)
+app.use('/api/topic', apiTopic)
+
 const run = (port=3000, host='127.0.0.1') => {
     const server = app.listen(port, host, () => {
         const address = server.address()
