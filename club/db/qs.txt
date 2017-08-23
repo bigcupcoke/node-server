@@ -1,0 +1,36 @@
+{
+  "title": "问卷1",
+  "id": "100",
+  "question": [
+    {
+      "id": "1001",
+      "subject": "T1",
+      "isChoice": "0",
+      "choice": [
+        {
+          "id": "10011",
+          "options": "T1O1"
+        },
+        {
+          "id": "10012",
+          "options": "T1O2"
+        }
+      ]
+    },
+    {
+      "id": "1002",
+      "subject": "T2",
+      "isChoice": "0",
+      "choice": [
+        {
+          "id": "10021",
+          "options": "T2O1"
+        },
+        {
+          "id": "10022",
+          "options": "T2O2"
+        }
+      ]
+    }
+  ]
+}

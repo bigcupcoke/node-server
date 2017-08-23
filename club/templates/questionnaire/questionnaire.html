@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>问卷调查管理界面</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/questionnaire/sweetalert/dist/sweetalert.css">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+    {#<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>#}
+    <script src="https://cdn.bootcss.com/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="/static/questionnaire/sweetalert/dist/sweetalert.min.js"></script>
+    <style media="screen">
+        .question:hover {
+            background: gray;
+        }
+        .debug-tool {
+            position: fixed;
+            top: 100px;
+            right: 90px;
+            /*border: 1px solid;*/
+        }
+        .question-tool {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <input type="text" class="form-control form-inline questionnaire-title"   data-questionnaireid="100" placeholder="这里是问卷标题">
+    </header>
+    <hr>
+    <!--编辑区域 -->
+    <main>
+        <!-- <div class="question">
+            <div class="que-title">
+                Q
+                <i>1</i>
+                <input type="text" class="" value="" placeholder="没道题目的标题">
+                <button class="btn btn-danger que-remove">删除该题</button>
+            </div>
+            <ol>
+                <li class="que-option">
+                    <input type="text" name="" value="" placeholder="每个选项的内容">
+                    <button type="button" class="btn btn-danger">删除</button>
+                </li>
+                <li class="que-option">
+                    <input type="text" name="" value="" placeholder="每个选项的内容">
+                    <button type="button" class="btn btn-danger">删除</button>
+                </li>
+                <li class="que-option">
+                    <input type="text" name="" value="" placeholder="每个选项的内容">
+                    <button type="button" class="btn btn-danger">删除</button>
+                </li>
+            </ol>
+            <div class="option-add">
+                添加选项
+            </div>
+        </div> -->
+    </main>
+    <hr>
+    <div class="question-tool">
+        <button class="btn btn-success btn-radio" data-type=0>单选</button>
+        <button class="btn btn-success btn-checkbox" data-type=1>多选</button>
+        <button class="btn btn-success btn-text" data-type=2>文本</button>
+        <div class="question-add">
+            添加新问题
+        </div>
+    </div>
+    <footer>
+        <button class="btn btn-success questionnaire-save">保存问卷</button>
+        <button class="btn btn-success questionnaire-revert">还原</button>
+    </footer>
+    <div class="debug-tool">
+        <button type="button" name="button">debug</button>
+    </div>
+    <script src="/static/questionnaire/config.js" charset="utf-8"></script>
+    <script src="/static/questionnaire/popup.js" charset="utf-8"></script>
+    <script src="/static/questionnaire/question.js" charset="utf-8"></script>
+    <script src="/static/questionnaire/option.js" charset="utf-8"></script>
+    <script type="text/javascript">
+
+        var init = function() {
+            var url = config.url.all;
+            $.ajax({
+                method: 'get',
+                // data: data
+                url: url,
+                success: function(data) {
+                    log(' ajax init success', data);
+                    var d = data.data;
+                    var que = Que.create(d);
+                    config.que = que;
+                },
+                error: function(error) {
+                    var s = JSON.stringify(error)
+                    log('*** error', s);
+                },
+            })
+        }
+
+        var __main = function() {
+            init();
+            var option = Option.create();
+            var enableDebugMode = function(debugMode) {
+                if (debugMode) {
+
+                    $('.btn-radio').click();
+                    $('.btn-radio').click();
+                    // $('.btn-radio').click();
+                    // $('.btn-radio').click();
+
+
+                    config.debug = function() {
+                        var i = config.que.infoAll();
+                        log('i info', i);
+                        // log('i info', i.question[0]);
+                    }
+
+                    $('.debug-tool').on('click', function() {
+                        log('click debug ok')
+                        config.debug && config.debug()
+                    })
+
+                } else {
+                    window.log = function() {};
+                    $('.bebug-tool').remove();
+                }
+            }
+            enableDebugMode(true);
+        }
+
+        __main();
+    </script>
+</body>
+</html>
