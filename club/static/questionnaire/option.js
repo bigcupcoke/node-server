@@ -3,7 +3,6 @@ var Option = function(form) {
     this.init();
 }
 
-
 Option.create = function() {
     var instance =  new this();
     return instance;
@@ -11,7 +10,6 @@ Option.create = function() {
 
 Option.prototype = {
 
-    //  原型指向到 Option
     constructor: Option,
 
     add: function() {
@@ -47,11 +45,15 @@ Option.prototype = {
         })
     },
 
-    template: function(value) {
-        var val = value || '';
+    template: function(optionInfo) {
+        var info = optionInfo || config.default.option
+        // info.options 是每个选项里的内容，不是所有的
+        //  后台定的字段是options， 这里要注意很容易发生歧义，
+        //  在 config.js 中 对应的字段 option
+        var val = info.options || '';
         var t = `
             <li class="que-option">
-                <input type="text" name="" value="${val}" placeholder="每个选项的内容">
+                <input type="text" class="option-content" value="${val}" placeholder="每个选项的内容">
                 <button type="button" class="btn btn-default  btn-sm option-remove">删除</button>
             </li>
         `

@@ -5,5 +5,23 @@ var config = {
     url: {
         all: 'http://127.0.0.1:3000/api/qs/all',
         add: 'http://127.0.0.1:3000/api/qs/add',
-    }
+    },
+
+    default: {
+        option: {
+            option: "",
+        },
+
+        que: {
+            isChoice: '',
+            choice: [
+                {
+                    "options": "",
+                },
+                {
+                    "option": "",
+                },
+            ],
+        },
+    },
 }

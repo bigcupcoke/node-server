@@ -90,6 +90,8 @@
                 success: function(data) {
                     log(' ajax init success', data);
                     var d = data.data;
+                    var option = Option.create();
+                    config.option = option;
                     var que = Que.create(d);
                     config.que = que;
                 },
@@ -102,12 +104,11 @@
 
         var __main = function() {
             init();
-            var option = Option.create();
             var enableDebugMode = function(debugMode) {
                 if (debugMode) {
 
-                    $('.btn-radio').click();
-                    $('.btn-radio').click();
+                    // $('.btn-radio').click();
+                    // $('.btn-radio').click();
                     // $('.btn-radio').click();
                     // $('.btn-radio').click();
 
