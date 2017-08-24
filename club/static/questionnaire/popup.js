@@ -1,3 +1,4 @@
+// 类： 弹窗
 var Popup = function() {};
 
 Popup.save = function() {

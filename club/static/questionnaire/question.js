@@ -1,3 +1,5 @@
+
+//  类 ： 调查问卷的问题
 var Que = function(form={}) {
     log(form, ' form ind ')
     this.title = form.title || ''
@@ -39,18 +41,19 @@ Que.prototype = {
             var index = que.index();
             var order = index + 1;
             que.remove();
-            _t.changeorder(index);
+            _t.changeOrder(index);
             // log(order, 'index removed')
         })
     },
 
+    // 移除所有问题
     removeAll: function() {
         var qs = $('.question');
         qs.remove();
     },
 
     //  从 起始序号的那个问题开始，跟着改变后面所有问题的序号
-    changeorder: function(start) {
+    changeOrder: function(start) {
         var queAll = $('.question');
         var s = start;
         var qs = $(queAll.slice(s));
@@ -74,8 +77,8 @@ Que.prototype = {
 
     //  返回 一个问题的 html 模板
     template: function(queInfo, index) {
-
         var q = queInfo;
+        // log(q, 'qqqq')
         var o = {};
         //  下标
         o.i = index;
@@ -87,22 +90,23 @@ Que.prototype = {
         o.options = q.choice;
         //  题目的序号
         o.order = index + 1;
-
+        // log('sdasd', o.type)
         var _t = this;
-        var template = {
+        var templateAll = {
             //  单选
-            "0": _t.templateByChoice(o),
+            "0": _t.templateByChoice,
             //  多选
-            "1": _t.templateByChoice(o),
+            "1": _t.templateByChoice,
             //  问答题
-            "2": _t.templateByEssay(o),
+            "2": _t.templateByEssay,
         }
-        return template[o.type];
+        return templateAll[o.type](o);
     },
 
     //  选择题的 html 模板
     templateByChoice: function(optionsInfo) {
         var o = optionsInfo;
+        log('*** o', o)
         //  type对应中文
         var typeChinese = {
             0: '单选题',
@@ -121,17 +125,17 @@ Que.prototype = {
 
         var html = `
         <div class="question" data-type=${o.type}>
-        <div class="que-title">
-        Q<i>${o.order}</i>  (${typeChinese[o.type]})
-        <input type="text" class="que-describe" value="${v}" placeholder="题目的标题">
-        <button class="btn btn-default btn-sm que-remove">删除该题</button>
-        </div>
-        <ol>
-        ${templatedOption}
-        </ol>
-        <div class="option-add">
-        添加选项
-        </div>
+            <div class="que-title">
+                Q<i>${o.order}</i>  (${typeChinese[o.type]})
+                <input type="text" class="que-describe" value="${v}" placeholder="题目的标题">
+                <button class="btn btn-default btn-sm que-remove">删除该题</button>
+            </div>
+            <ol>
+                ${templatedOption}
+            </ol>
+                <div class="option-add">
+                添加选项
+            </div>
         </div>
         `
         return html;
@@ -140,16 +144,17 @@ Que.prototype = {
     //  问答题的 html 模板
     templateByEssay: function(textInfo) {
         var o = textInfo;
+        log('** o eassay', o.describe)
         var val = o.describe || '';
         var t = `
-        <div class="question" data-type=2>
-        <div class="que-title">
-        Q<i>${o.order}</i> (问答题)
-        <button class="btn btn-default btn-sm que-remove">删除该题</button>
-        </div>
-        <div  class="que-option textarea-option">
-        <textarea class="option-content" rows="8" cols="80" value=${val} placeholder="问答题内容"></textarea>
-        </div>
+        <div class="question" data-type="2">
+            <div class="que-title">
+                Q<i>${o.order}</i> (问答题)
+                <button class="btn btn-default btn-sm que-remove">删除该题</button>
+            </div>
+            <div  class="que-option textarea-option">
+                <textarea class="option-content" rows="8" cols="80" value="" placeholder="问答题内容">${val}</textarea>
+            </div>
         </div>
         `
         return t;
@@ -231,6 +236,7 @@ Que.prototype = {
         })
     },
 
+    // 问卷所有的数据
     infoAll: function() {
         var title = $('.questionnaire-title').val();
         var id = $('.questionnaire-title').data('questionnaireid');
@@ -242,6 +248,7 @@ Que.prototype = {
         };
     },
 
+    // 每道题目的信息
     infoFromQues: function(questionnaireId) {
         var _t = this;
         var qs = $('.question');
@@ -250,21 +257,34 @@ Que.prototype = {
         for (var i = 0; i < qs.length; i++) {
             var e = $(qs[i]);
             var type = e.data('type');
+            // 题目的 id
             var id = qId + e.find('i').text();
-            var describe = e.find('.que-describe').val();
-            var optionsInfo =_t.infoFromOptions(id, e);
             var o = {
                 id: id,
-                subject: describe,
                 isChoice: type,
-                choice: optionsInfo,
             }
+            // log('type 2', [type])
+            //  如果是 问答题，
+            if (type === 2) {
+                //  题目的问题描述
+                var describe = e.find('.option-content').val();
+            } else {
+                //  是选择题
+                //  题目的问题描述
+                var describe = e.find('.que-describe').val();
+                // 题目选项的信息
+                var optionsInfo =_t.infoFromChoice(id, e);
+                o.choice = optionsInfo;
+            }
+            // 问题描述
+            o.subject = describe;
             r.push(o);
         }
         return r;
     },
 
-    infoFromOptions: function(queId, que) {
+    //  选择题的数据信息
+    infoFromChoice: function(queId, que) {
         var p = que;
         var pid = queId;
         var options = p.find('.que-option');

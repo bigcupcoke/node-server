@@ -1,4 +1,4 @@
-//  option 类
+//  类： 选项
 var Option = function(form) {
     this.init();
 }
