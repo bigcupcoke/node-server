@@ -79,6 +79,7 @@
     <script src="/static/questionnaire/popup.js" charset="utf-8"></script>
     <script src="/static/questionnaire/question.js" charset="utf-8"></script>
     <script src="/static/questionnaire/option.js" charset="utf-8"></script>
+    <script src="/static/questionnaire/questionnaire.js" charset="utf-8"></script>
     <script type="text/javascript">
 
         var init = function() {
@@ -88,12 +89,11 @@
                 // data: data
                 url: url,
                 success: function(data) {
-                    log(' ajax init success', data);
+                    log(' ajax init data success', data);
                     var d = data.data;
-                    var option = Option.create();
-                    config.option = option;
-                    var que = Que.create(d);
-                    config.que = que;
+                    config.option = Option.create();
+                    config.que = Que.create();
+                    config.queNaire = QueNarie.create(d);
                 },
                 error: function(error) {
                     var s = JSON.stringify(error)
@@ -104,6 +104,7 @@
 
         var __main = function() {
             init();
+
             var enableDebugMode = function(debugMode) {
                 if (debugMode) {
 
@@ -111,8 +112,6 @@
                     // $('.btn-radio').click();
                     // $('.btn-radio').click();
                     // $('.btn-radio').click();
-
-
                     config.debug = function() {
                         var i = config.que.infoAll();
                         log('i info', i);

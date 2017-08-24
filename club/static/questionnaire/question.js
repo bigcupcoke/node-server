@@ -1,10 +1,6 @@
 
-//  类 ： 调查问卷的问题
-var Que = function(form={}) {
-    log(form, ' form ind ')
-    this.title = form.title || ''
-    this.id = form.id || ''
-    this.qs = form.question || []
+//  类 ： 问题
+var Que = function() {
     this.init()
 }
 
@@ -15,6 +11,11 @@ Que.create = function(form) {
 
 Que.prototype = {
     constructor: Que,
+
+    init: function() {
+        log('init  que ok')
+        this.bindEvents();
+    },
 
     //  添加一个问题
     add: function(type) {
@@ -46,10 +47,22 @@ Que.prototype = {
         })
     },
 
-    // 移除所有问题
-    removeAll: function() {
-        var qs = $('.question');
-        qs.remove();
+    //  绑定事件
+    bindEvents: function() {
+        this.add();
+        this.remove();
+    },
+
+    //  每题对应的序号， ＝下标 index+１
+    order: function() {
+        var len = $('.question').length;
+        var order = -1
+        if (len > 0) {
+            order = len + 1;
+        } else {
+            order = 1;
+        }
+        return order;
     },
 
     //  从 起始序号的那个问题开始，跟着改变后面所有问题的序号
@@ -68,14 +81,7 @@ Que.prototype = {
         }
     },
 
-    bindEvents: function() {
-        this.add();
-        this.remove();
-        this.save();
-        this.revert();
-    },
-
-    //  返回 一个问题的 html 模板
+    //  任意一个问题的 html 模板
     template: function(queInfo, index) {
         var q = queInfo;
         // log(q, 'qqqq')
@@ -158,149 +164,5 @@ Que.prototype = {
         </div>
         `
         return t;
-    },
-
-    //  每题对应的序号， ＝下标 index+１
-    order: function() {
-        var len = $('.question').length;
-        var order = -1
-        if (len > 0) {
-            order = len + 1;
-        } else {
-            order = 1;
-        }
-        return order;
-    },
-
-    initTitle: function() {
-        var _t = this;
-        log('init title ok', _t)
-        $('.questionnaire-title').val(_t.title);
-        $('.questionnaire-title').data('questionnaireid', _t.id);
-    },
-
-    initQues: function() {
-        var html = '';
-        this.qs.forEach((function(info, i) {
-            var t = this.template(info, i);
-            html += t;
-        }).bind(this))
-        $('main').append(html);
-    },
-
-    init: function() {
-        log('init all ques ok')
-        this.initTitle();
-        this.initQues();
-        this.bindEvents();
-    },
-
-    save: function() {
-        var _t = this;
-        //  id 是 string 形式
-        $('.questionnaire-save').on('click', function() {
-            // var info = this.infoAll();
-            // return info;
-            _t.ajaxAdd();
-        })
-    },
-
-    ajaxAdd: function() {
-        var _t = this;
-        var url = config.url.add;
-        var data = _t.infoAll();
-        // log('ajax send', $.ajax)
-        $.ajax({
-            method: 'post',
-            data: data,
-            url: url,
-            success: function(data) {
-                log(' ajax success', data);
-                Popup.save();
-            },
-            error: function(error) {
-                var s = JSON.stringify(error)
-                log('*** error', s);
-            },
-        })
-    },
-
-    revert: function() {
-        var _t = this;
-        $('.questionnaire-revert').on('click', function() {
-            // var info = this.infoAll();
-            // return info;
-            Popup.revert(function() {
-                _t.removeAll()
-            });
-        })
-    },
-
-    // 问卷所有的数据
-    infoAll: function() {
-        var title = $('.questionnaire-title').val();
-        var id = $('.questionnaire-title').data('questionnaireid');
-        var quesInfo = this.infoFromQues(id);
-        return {
-            title: title,
-            id: id,
-            question: quesInfo
-        };
-    },
-
-    // 每道题目的信息
-    infoFromQues: function(questionnaireId) {
-        var _t = this;
-        var qs = $('.question');
-        var qId = questionnaireId;
-        var r = [];
-        for (var i = 0; i < qs.length; i++) {
-            var e = $(qs[i]);
-            var type = e.data('type');
-            // 题目的 id
-            var id = qId + e.find('i').text();
-            var o = {
-                id: id,
-                isChoice: type,
-            }
-            // log('type 2', [type])
-            //  如果是 问答题，
-            if (type === 2) {
-                //  题目的问题描述
-                var describe = e.find('.option-content').val();
-            } else {
-                //  是选择题
-                //  题目的问题描述
-                var describe = e.find('.que-describe').val();
-                // 题目选项的信息
-                var optionsInfo =_t.infoFromChoice(id, e);
-                o.choice = optionsInfo;
-            }
-            // 问题描述
-            o.subject = describe;
-            r.push(o);
-        }
-        return r;
-    },
-
-    //  选择题的数据信息
-    infoFromChoice: function(queId, que) {
-        var p = que;
-        var pid = queId;
-        var options = p.find('.que-option');
-        var r = [];
-        for (var i = 0; i < options.length; i++) {
-            var e = $(options[i]);
-            var oId = i + 1;
-            var id = pid + oId;
-            var content = e.find('.option-content').val();
-            // log(content,  'content');
-            var o = {
-                id: id,
-                options: content,
-            }
-            r.push(o);
-        }
-        return r;
     },
 }
