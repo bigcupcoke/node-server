@@ -1,11 +1,13 @@
 //  类： 问卷
-var QueNarie = function(form={}) {
+var QueNarie = function(form) {
     log(form, ' form ind ')
-    this.title = form.title || ''
-    this.id = form.id || ''
-    this.qs = form.question || []
-    this.que = config.que || null
-    this.init()
+    this.title = form.title || '';
+    this.id = form.id || '';
+    this.qs = form.question || [];
+    this.que = config.que || null;
+    if (form !== undefined) {
+        this.init();
+    }
 }
 
 QueNarie.create = function(form) {
@@ -44,11 +46,15 @@ QueNarie.prototype = {
         var title = $('.questionnaire-title').val();
         var id = $('.questionnaire-title').data('questionnaireid');
         var quesInfo = this.infoFromQues(id);
-        return {
+        var o = {
             title: title,
             id: id,
             question: quesInfo
         };
+
+        return {
+            data: o
+        }
     },
 
     // 每道题目的信息
@@ -100,7 +106,7 @@ QueNarie.prototype = {
             // log(content,  'content');
             var o = {
                 id: id,
-                options: content,
+                content: content,
             }
             r.push(o);
         }

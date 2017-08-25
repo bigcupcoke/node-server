@@ -1,5 +1,6 @@
 //  类： 选项
-var Option = function(form) {
+var Option = function() {
+    this.default = config.default.choice;
     this.init();
 }
 
@@ -20,10 +21,10 @@ Option.prototype = {
             var ol = self.siblings('ol');
             // log(ol, 'ol')
             var counts = ol.find('.que-option').length;
-            if (counts >= 5) {
+            if (counts >= _t.default.counts) {
                 swal({
                     title: "选项数量达到上限",
-                    text: "最多设置 10 个选项",
+                    text: `最多设置 ${_t.default.counts} 个选项`,
                     confirmButtonText: "确认"
                 });
                 // alert('最多只能设置10个选项');
@@ -46,11 +47,11 @@ Option.prototype = {
     },
 
     template: function(optionInfo) {
-        var info = optionInfo || config.default.option
+        var info = optionInfo || this.default;
         // info.options 是每个选项里的内容，不是所有的
         //  后台定的字段是options， 这里要注意很容易发生歧义，
         //  在 config.js 中 对应的字段 option
-        var val = info.options || '';
+        var val = info.content || '';
         var t = `
             <li class="que-option">
                 <input type="text" class="option-content" value="${val}" placeholder="每个选项的内容">

@@ -4,8 +4,8 @@ var Que = function() {
     this.init()
 }
 
-Que.create = function(form) {
-    var instance =  new this(form);
+Que.create = function() {
+    var instance =  new this();
     return instance;
 }
 
