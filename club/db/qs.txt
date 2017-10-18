@@ -1,36 +1,63 @@
 {
-  "title": "问卷1",
-  "id": "100",
-  "question": [
-    {
-      "id": "1001",
-      "subject": "T1",
-      "isChoice": "0",
-      "choice": [
-        {
-          "id": "10011",
-          "options": "T1O1"
-        },
-        {
-          "id": "10012",
-          "options": "T1O2"
-        }
-      ]
-    },
-    {
-      "id": "1002",
-      "subject": "T2",
-      "isChoice": "0",
-      "choice": [
-        {
-          "id": "10021",
-          "options": "T2O1"
-        },
-        {
-          "id": "10022",
-          "options": "T2O2"
-        }
-      ]
-    }
-  ]
+  "data": {
+    "title": "sfasfasf",
+    "id": "100",
+    "question": [
+      {
+        "id": "1001",
+        "isChoice": "0",
+        "choice": [
+          {
+            "id": "10011",
+            "content": ""
+          },
+          {
+            "id": "10012",
+            "content": ""
+          }
+        ],
+        "subject": "T1"
+      },
+      {
+        "id": "1002",
+        "isChoice": "2",
+        "subject": "打扫打扫打扫打扫的"
+      },
+      {
+        "id": "1003",
+        "isChoice": "0",
+        "choice": [
+          {
+            "id": "10031",
+            "content": ""
+          },
+          {
+            "id": "10032",
+            "content": ""
+          }
+        ],
+        "subject": "dasdas "
+      },
+      {
+        "id": "1004",
+        "isChoice": "1",
+        "choice": [
+          {
+            "id": "10041",
+            "content": ""
+          },
+          {
+            "id": "10042",
+            "content": ""
+          }
+        ],
+        "subject": "大骚动"
+      },
+      {
+        "id": "1005",
+        "isChoice": "2",
+        "subject": "撒大苏打撒"
+      }
+    ]
+  }
 }

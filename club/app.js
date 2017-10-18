@@ -35,6 +35,8 @@ const index = require('./routes/index')
 const topic = require('./routes/t')
 const reply = require('./routes/r')
 const apiTopic = require('./api/topic')
+const questionNaire = require('./routes/questionnaire')
+const apiQs = require('./api/questionnaire')
 // static 资源
 const asset = __dirname + '/static'
 
@@ -44,7 +46,8 @@ app.use('/todo', todo)
 app.use('/topic', topic)
 app.use('/reply', reply)
 app.use('/api/topic', apiTopic)
-
+app.use('/qs', questionNaire)
+app.use('/api/qs', apiQs)
 const run = (port=3000, host='127.0.0.1') => {
     const server = app.listen(port, host, () => {
         const address = server.address()

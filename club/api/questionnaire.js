@@ -31,6 +31,17 @@ const router = express.Router()
 
 router.get('/all', (req, resp) => {
     const d = load('./db/qs.txt')
+    const data = d.data
+    const dict = {
+        success: true,
+        data: data,
+        message: ''
+    }
+    jsonResponse(req, resp, dict)
+})
+
+router.get('/list', (req, resp) => {
+    const d = load('./db/list.txt')
     const dict = {
         success: true,
         data: d,
